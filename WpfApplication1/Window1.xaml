@@ -5,9 +5,15 @@
         Title="Resynk" Height="200" Width="345">
     <Grid>
         <StackPanel Orientation="Vertical">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3D4650"/>
+                    <GradientStop Color="#FF56626F" Offset="0.984"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" VerticalAlignment="Top">
                 <Label Content="Fichier :" HorizontalAlignment="Left" Margin="20,15,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="tbFic" HorizontalAlignment="Left" Height="23" Margin="0,15,0,0" IsEnabled="False" TextWrapping="Wrap" 
+                <TextBox x:Name="tbFic" HorizontalAlignment="Left" Height="23" Margin="10,10,0,5" IsEnabled="False" TextWrapping="Wrap" 
                      Text="TextBox" VerticalAlignment="Top" Width="240"/>
             </StackPanel>
             <StackPanel Name="spTemps" Orientation="Horizontal" Height="40" Margin="15,11,0,6">
