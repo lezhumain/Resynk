@@ -137,5 +137,56 @@ namespace Resynk
 
             return s;
         }
+
+        // overload operator ==
+        public static bool operator ==(Time a, Time b)
+        {
+            if (a.h == b.h && a.m == b.m && a.s == b.s && a.z == b.z)
+                return true;
+            else
+                return false;
+        }
+
+        // overload operator !=
+        public static bool operator !=(Time a, Time b)
+        {
+            return !(a==b);
+        }
+
+        // overload operator >
+        public static bool operator >(Time a, Time b)
+        {
+            if (a.h > b.h || a.m > b.m || a.s > b.s || a.z > b.z)
+                return true;
+            else
+                return false;
+        }
+
+        // overload operator <
+        public static bool operator <(Time a, Time b)
+        {
+            if (a.h < b.h || a.m < b.m || a.s < b.s || a.z < b.z)
+                return true;
+            else
+                return false;
+        }
+
+        // overload operator >=
+        public static bool operator >=(Time a, Time b)
+        {
+            if (a > b || a == b)
+                return true;
+            else
+                return false;
+        }
+
+        // overload operator <=
+        public static bool operator <=(Time a, Time b)
+        {
+            if (a < b || a == b)
+                return true;
+            else
+                return false;
+        }
     }
 }

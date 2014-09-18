@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,12 +22,39 @@ namespace Resynk
     public partial class Window1 : Window
     {
         private string filename { get; set; }
+        //public int cpt { get; set; }
+
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void NotifyPropertyChange(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
+
+        private double percent = 0;
+        public double Percent
+        {
+            get { return this.percent; }
+            set
+            {
+                this.percent = value;
+                NotifyPropertyChange("Percent");
+            }
+        }
+
+
 
         public Window1()
         {
             InitializeComponent();
             tbFic.Text = "lolilol";
             filename = "";
+            percent = 0;
         }
 
         public Window1(string name, string filename)
@@ -123,8 +151,25 @@ namespace Resynk
             }
             //---------------
 
-            resynk(path, filename, totalMil);
-            Alert("Bwavo ! Ay maté film aw");
+
+            //string apartir = "" + exh.ToString()
+            try
+            {
+                mili = int.Parse(exz.Text);
+                sec = int.Parse(exs.Text);
+                min = int.Parse(exm.Text);
+                heu = int.Parse(exh.Text);
+            }
+            catch (FormatException fe)
+            {
+                Alert("Seulement des nombres");
+                return;
+            }
+            Time t = new Time(heu, min, sec, mili);
+            //------------------------
+            resynk(path, filename, totalMil, t);
+            
+            Alert("Syncro terminée.");
 
             this.Button_Click_1(new object(), new RoutedEventArgs());
         }
@@ -152,13 +197,22 @@ namespace Resynk
             return cpt;
         }
 
-        private void resynk(string path, string ifile, int milToAdd)
+        private void resynk(string path, string ifile, int milToAdd, Time tapartirde)
         {
             string ofile = "synk_" + ifile;
             int cpt = 1;
             int total = 0;
+            double lol = 0;
+            /*
+            Time tapartirde = new Time();
+            
+            if(!tapartirde.Parse(apartirde))
+                return;
+            */
 
+            // Chiffre seul
             string patternC = @"^[0-9]+$";
+            // Temps => 00:00:00,000 --> 00:00:00,000
             string patternT = @"^([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})\s?$";
 
             // Instantiate the regular expression object.
@@ -183,6 +237,11 @@ namespace Resynk
                     if (int.Parse(line) != cpt)
                         ligne = cpt.ToString();
                     ++cpt;
+                    // StatusBar
+                    //Percent = (float)cpt * 100.0 / (float)total;
+
+                    pb.Value = (float)cpt * 100.0 / (float)total;
+                    lol = pb.Value;
                 }
 
                 Match m = tps.Match(line);
@@ -198,13 +257,21 @@ namespace Resynk
                     Time ti2 = new Time();
                     ti2.Parse(tps2);
 
+                    /*
+                     * FAIRE operateur= pour Time
+                     * faire bool passer = true
+                     * ti1 >= tapartirde => passer = false
+                     * 
+                     */
+                    if (ti1 >= tapartirde)
+                    {
+                        ti1.AddMil(milToAdd);
+                        ti2.AddMil(milToAdd);
 
-                    ti1.AddMil(milToAdd);
-                    ti2.AddMil(milToAdd);
+                        ligne = ti1.ToString() + " --> " + ti2.ToString();
 
-                    ligne = ti1.ToString() + " --> " + ti2.ToString();
-
-                    int i = 0;
+                        int i = 0;
+                    }
                 }
 
 
