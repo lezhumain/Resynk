@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,7 +27,9 @@ namespace Resynk
 
 
         #region INotifyPropertyChanged
+        
         public event PropertyChangedEventHandler PropertyChanged;
+        
         protected void NotifyPropertyChange(string propertyName)
         {
             if (PropertyChanged != null)
@@ -36,7 +39,7 @@ namespace Resynk
         }
         #endregion
 
-        private double percent = 0;
+        private double percent;
         public double Percent
         {
             get { return this.percent; }
@@ -47,19 +50,78 @@ namespace Resynk
             }
         }
 
+        /// <summary>
+        /// Permet de tester l'encodage utilisé pour le fichier texte dont le chemin est fourni
+        /// </summary>
+        /// <param name="CheminFichier">Chemin du fichier</param>
+        /// <returns>Encodage du fichier Texte</returns>
+        private Encoding ObtientENcoding(string CheminFichier)
+        {
+            /*
+             * Source:
+             * http://codes-sources.commentcamarche.net/source/35661-c-fonction-permettant-d-obtenir-l-encodage-d-un-fichier-texte
+             */
+            Encoding enc = null;
+            FileStream file = new FileStream(CheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
+	        if (file.CanSeek)
+	        {
+		        byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
+		        file.Read(bom, 0, 4);
+		        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) // utf-8
+		        {
+			        enc = Encoding.UTF8;
+		        }
+		        else if ((bom[0] == 0xff && bom[1] == 0xfe) || // ucs-2le, ucs-4le, and ucs-16le
+			        (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)) // ucs-4
+		        {
+			        enc = Encoding.Unicode;
+		        }
+		        else if (bom[0] == 0xfe && bom[1] == 0xff) // utf-16 and ucs-2
+		        {
+			        enc = Encoding.BigEndianUnicode;
+		        }
+		        else // ANSI, Default
+		        {
+			        enc = Encoding.Default;
+		        }
+		        // Now reposition the file cursor back to the start of the file
+		        file.Seek(0, SeekOrigin.Begin);
+	        }
+	        else
+	        {
+		        // The file cannot be randomly accessed, so you need to decide what to set the default to
+		        // based on the data provided. If you're expecting data from a lot of older applications,
+		        // default your encoding to Encoding.ASCII. If you're expecting data from a lot of newer
+		        // applications, default your encoding to Encoding.Unicode. Also, since binary files are
+		        // single byte-based, so you will want to use Encoding.ASCII, even though you'll probably
+		        // never need to use the encoding then since the Encoding classes are really meant to get
+		        // strings from the byte array that is the file.
 
+		        enc = Encoding.Default;
+	        }
+        return enc;
+        }
 
         public Window1()
         {
-            InitializeComponent();
+            init();
+
             tbFic.Text = "lolilol";
             filename = "";
-            percent = 0;
+        }
+
+        private void init()
+        {
+            InitializeComponent();
+            DataContext = this;
+
+            Percent = 50;
         }
 
         public Window1(string name, string filename)
         {
-            InitializeComponent();
+            init();
+
             tbFic.Text = name;
             this.filename = filename;
         }
@@ -136,7 +198,7 @@ namespace Resynk
                 return;
             }
             
-            totalMil += mili + 100 * sec + 6000 * min + 360000 * heu;
+            totalMil += mili + (sec + 60 * min + 3600 * heu) * 1000;
             
             // Gere le signe
             if (rbMoins.IsChecked == true)
@@ -221,10 +283,15 @@ namespace Resynk
 
             string[] lines = System.IO.File.ReadAllLines(@path + "\\" + ifile);
 
+            Encoding enc = ObtientENcoding(path + "\\" + ifile);
+
             // output file
-            System.IO.StreamWriter file = new System.IO.StreamWriter(path + "\\" + ofile);
+            //System.IO.StreamWriter file = new System.IO.StreamWriter(path + "\\" + ofile);
+            FileStream fs = File.Create(path + "\\" + ofile);
+            System.IO.StreamWriter file = new System.IO.StreamWriter(fs, enc);
 
             total = getNb(lines, chi);
+            pb.Visibility = System.Windows.Visibility.Visible;
 
             foreach (string line in lines)
             {
@@ -237,11 +304,20 @@ namespace Resynk
                     if (int.Parse(line) != cpt)
                         ligne = cpt.ToString();
                     ++cpt;
-                    // StatusBar
-                    //Percent = (float)cpt * 100.0 / (float)total;
 
-                    pb.Value = (float)cpt * 100.0 / (float)total;
-                    lol = pb.Value;
+                    // StatusBar
+                    // binding???
+                    Percent = (float)cpt * 100.0 / (float)total;
+                    pb.Value = Percent;
+                    
+                    /*
+                    if (cpt % 50 == 0)
+                    {
+                        lol = pb.Value;
+                        Alert("" + Percent + "% \n val: " + lol);
+                    }
+                    */
+                    
                 }
 
                 Match m = tps.Match(line);
@@ -281,6 +357,7 @@ namespace Resynk
             }
 
             file.Close();
+            fs.Close();
         }
 
         private void Alert(string msg)

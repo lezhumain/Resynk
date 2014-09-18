@@ -54,7 +54,8 @@
                 </WrapPanel>
             </StackPanel>
             <WrapPanel Margin="0,0,0,20">
-                <ProgressBar Name="pb" Maximum="100" Minimum="0" Value="{Binding Percent}" Margin="15,0,15,0" Height="24" Width="300"></ProgressBar>
+                <!-- binding ??? -->
+                <ProgressBar Name="pb" Maximum="100" Minimum="0" Margin="15,0,15,0" Height="24" Width="300"></ProgressBar>
             </WrapPanel>
             <StackPanel Height="25" Orientation="Horizontal" VerticalAlignment="Bottom">
                 <Button Height="24" x:Name="bResynk" Content="Resynk" Margin="80,0,5,0" IsEnabled="False" HorizontalAlignment="Left" 

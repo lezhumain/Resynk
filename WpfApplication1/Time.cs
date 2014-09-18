@@ -64,10 +64,10 @@ namespace Resynk
             if (mil == 0)
                 return;
 
-            int r = mil % 100;
-            int v = mil / 100;
+            int r = mil % 1000;
+            int v = mil / 1000;
 
-            this.z = (this.z + r) % 100;
+            this.z = (this.z + r) % 1000;
             AddSec(v);
         }
 
