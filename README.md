@@ -18,5 +18,5 @@ Le fichier de sortie se trouvera dans le même dossier que le fichier d'entrée.
 <br>
 <br>
 Sources : https://github.com/lezhumain/Resynk <br>
-Exe : https://www.dropbox.com/s/8n5nocz3agu9ypc/Resynk.exe?dl=0 <br>
+Exe : https://www.dropbox.com/s/5rkgnkiz53mcdsi/Resynk.zip?dl=0 <br>
 
