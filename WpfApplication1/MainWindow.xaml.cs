@@ -33,6 +33,7 @@ namespace Resynk
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            /*
             // Create OpenFileDialog
 
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -68,7 +69,19 @@ namespace Resynk
                 Application.Current.MainWindow = w;
                 this.Close();
             }
+            */
 
+            Time t1 = new Time();
+            Time t2 = new Time();
+
+            t1.Parse("00:01:45,000");
+            t2.Parse("00:02:59,000");
+
+            t1.z = 1001;
+            Console.WriteLine("z = " + t1.z.ToString());
+
+            t1.z = -2;
+            Console.WriteLine("z = " + t1.z.ToString());
         }
     }
 }

@@ -11,10 +11,77 @@ namespace Resynk
     {
         private Regex reg;
 
+        private int _h;
         public int h { get; set; }
-        public int m { get; set; }
-        public int s { get; set; }
-        public int z { get; set; }
+
+        private int _m;
+        public int m
+        {
+            get
+            {
+                return _m;
+            }
+            set
+            {
+                _m = value;
+                if (value >= 60)
+                {
+                    _m = value % 60;
+                    h += value / 60;
+                }
+                else if (value < 0)
+                {
+                    _m = 60 + value % 60;
+                    h += value / 60;
+                }
+            }
+        }
+
+        private int _s;
+        public int s
+        {
+            get
+            {
+                return _s;
+            }
+            set
+            {
+                _s = value;
+                if (value >= 60)
+                {
+                    _s = value % 60;
+                    m += value / 60;
+                }
+                else if (value < 0)
+                {
+                    _s = 60 + value % 60;
+                    m += value / 60;
+                }
+            }
+        }
+
+        private int _z;
+        public int z
+        {
+            get
+            {
+                return _z;
+            }
+            set
+            {
+                _z = value;
+                if (value >= 1000)
+                {
+                    _z = value % 1000;
+                    s += value / 1000;
+                }
+                else if (value < 0)
+                {
+                    _z = 1000 + value % 1000;
+                    s += value / 1000;
+                }
+            }
+        }
 
         public Time()
         {
@@ -67,7 +134,10 @@ namespace Resynk
             int r = mil % 1000;
             int v = mil / 1000;
 
-            this.z = (this.z + r) % 1000;
+            this.z = (this.z + r);
+            if (this.z < 0)
+                this.z = 0;
+            
             AddSec(v);
         }
 
@@ -79,7 +149,11 @@ namespace Resynk
             int r = sec % 60;
             int v = sec / 60;
 
-            this.s = (this.s + r) % 60;
+            this.s = this.s + r;
+            //this.s = (this.s + r) % 60;
+            if (this.s < 0)
+                this.s = 0;
+
             AddMin(v);
         }
 
@@ -91,7 +165,10 @@ namespace Resynk
             int r = min % 60;
             int v = min / 60;
 
-            this.m = (this.m + r) % 60;
+            this.m = (this.m + r);
+            if (this.m < 0)
+                this.m = 0;
+            
             AddHeu(v);
         }
 
@@ -107,6 +184,8 @@ namespace Resynk
             this.h = (this.h + r) % 24;
             */
             this.h += heu;
+            if (this.h < 0)
+                this.h = 0;
         }
 
         public string ToString()

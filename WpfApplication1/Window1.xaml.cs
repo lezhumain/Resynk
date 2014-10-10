@@ -281,10 +281,11 @@ namespace Resynk
             Regex chi = new Regex(patternC, RegexOptions.IgnoreCase);
             Regex tps = new Regex(patternT, RegexOptions.IgnoreCase);
 
-            string[] lines = System.IO.File.ReadAllLines(@path + "\\" + ifile);
-
             Encoding enc = ObtientENcoding(path + "\\" + ifile);
+            
+            string[] lines = System.IO.File.ReadAllLines(@path + "\\" + ifile, enc);
 
+            
             // output file
             //System.IO.StreamWriter file = new System.IO.StreamWriter(path + "\\" + ofile);
             FileStream fs = File.Create(path + "\\" + ofile);
