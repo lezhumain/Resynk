@@ -32,7 +32,7 @@ namespace Resynk
                 else if (value < 0)
                 {
                     _m = 60 + value % 60;
-                    h += value / 60;
+                    h += value / 60 - 1;
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace Resynk
                 else if (value < 0)
                 {
                     _s = 60 + value % 60;
-                    m += value / 60;
+                    m += value / 60 - 1;
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Resynk
                 else if (value < 0)
                 {
                     _z = 1000 + value % 1000;
-                    s += value / 1000;
+                    s = s + value / 1000 - 1;
                 }
             }
         }
