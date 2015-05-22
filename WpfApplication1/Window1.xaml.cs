@@ -359,6 +359,13 @@ namespace Resynk
 
             file.Close();
             fs.Close();
+
+            // MoveFocus path + "\\" + ifile to old
+            String newifile = ifile.Substring(0, ifile.Length - 5) + "_old.srt";
+            String newofile = ifile;
+
+            System.IO.File.Move(path + "\\" + ifile, path + "\\" + newifile);
+            System.IO.File.Move(path + "\\" + ofile, path + "\\" + newofile);
         }
 
         private void Alert(string msg)

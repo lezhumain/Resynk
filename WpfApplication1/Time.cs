@@ -267,5 +267,7 @@ namespace Resynk
             else
                 return false;
         }
+
+        // TODO: GetHashCode(), GetEquals()
     }
 }
