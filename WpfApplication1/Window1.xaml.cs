@@ -99,7 +99,7 @@ namespace Resynk
 
 		        enc = Encoding.Default;
 	        }
-        return enc;
+            return enc;
         }
 
         public Window1()
@@ -364,8 +364,10 @@ namespace Resynk
             String newifile = ifile.Substring(0, ifile.Length - 5) + "_old.srt";
             String newofile = ifile;
 
-            System.IO.File.Move(path + "\\" + ifile, path + "\\" + newifile);
-            System.IO.File.Move(path + "\\" + ofile, path + "\\" + newofile);
+            System.Threading.Thread.Sleep(2000);
+
+            System.IO.File.Move("" + path + "\\" + ifile, path + "\\" + newifile);
+            System.IO.File.Move("" + path + "\\" + ofile, path + "\\" + newofile);
         }
 
         private void Alert(string msg)
