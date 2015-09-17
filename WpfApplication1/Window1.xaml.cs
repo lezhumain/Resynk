@@ -239,9 +239,9 @@ namespace Resynk
 
         private void Resynk(string path, string ifile, int milToAdd, Time tapartirde)
         {
-            var resynk = new Resynk(this);
+            var resynk = new SrtResynk(this);
 
-            resynk.resynk(path, ifile, milToAdd, tapartirde,
+            resynk.Resynk(path, ifile, milToAdd, tapartirde,
                         ObtientENcoding(path + "\\" + ifile));
 
             pb.Visibility = Visibility.Visible;

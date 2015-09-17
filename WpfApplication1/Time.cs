@@ -9,6 +9,33 @@ namespace Resynk
 {
     public class Time
     {
+        protected bool Equals(Time other)
+        {
+            return Equals(this.reg, other.reg) && this._h == other._h && this._m == other._m && this._s == other._s && this._z == other._z && this.h == other.h;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Time) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (this.reg != null ? this.reg.GetHashCode() : 0);
+                hashCode = (hashCode*397) ^ this._h;
+                hashCode = (hashCode*397) ^ this._m;
+                hashCode = (hashCode*397) ^ this._s;
+                hashCode = (hashCode*397) ^ this._z;
+                hashCode = (hashCode*397) ^ this.h;
+                return hashCode;
+            }
+        }
+
         private Regex reg;
 
         private int _h;
