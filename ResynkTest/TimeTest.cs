@@ -12,12 +12,12 @@ namespace ResynkTest
 
         private void ResetTime()
         {
-            _time = new Time(0, 0, 0, 0);
+            _time = Time.MinValue;
         }
 
         private void FillTime()
         {
-            _time = new Time(59, 59, 59, 999);
+            _time = Time.MaxValue;
         }
 
         [TestInitialize]
@@ -85,7 +85,7 @@ namespace ResynkTest
             Assert.AreEqual("06:00:00,000", _time.ToString());
 
             _time.AddHeu(60);
-            Assert.AreEqual("66:00:00,000", _time.ToString());
+            Assert.AreEqual("23:00:00,000", _time.ToString());
         }
 
         [TestMethod]
@@ -94,16 +94,16 @@ namespace ResynkTest
             FillTime();
 
             _time.AddMil(-5);
-            Assert.AreEqual("59:59:59,994", _time.ToString());
+            Assert.AreEqual("23:59:59,994", _time.ToString());
 
             _time.AddMil(-1000);
-            Assert.AreEqual("59:59:58,994", _time.ToString());
+            Assert.AreEqual("23:59:58,994", _time.ToString());
 
             _time.AddMil(-60000);
-            Assert.AreEqual("59:58:58,994", _time.ToString());
+            Assert.AreEqual("23:58:58,994", _time.ToString());
 
             _time.AddMil(-3600000);
-            Assert.AreEqual("58:58:58,994", _time.ToString());
+            Assert.AreEqual("22:58:58,994", _time.ToString());
         }
 
         [TestMethod]
@@ -112,13 +112,13 @@ namespace ResynkTest
             FillTime();
 
             _time.AddSec(-6);
-            Assert.AreEqual("59:59:53,999", _time.ToString());
+            Assert.AreEqual("23:59:53,999", _time.ToString());
 
             _time.AddSec(-60);
-            Assert.AreEqual("59:58:53,999", _time.ToString());
+            Assert.AreEqual("23:58:53,999", _time.ToString());
 
             _time.AddSec(-3600);
-            Assert.AreEqual("58:58:53,999", _time.ToString());
+            Assert.AreEqual("22:58:53,999", _time.ToString());
 
             _time.AddSec(-216000);
             Assert.AreEqual("00:00:00,000", _time.ToString());
@@ -130,10 +130,10 @@ namespace ResynkTest
             FillTime();
 
             _time.AddMin(-6);
-            Assert.AreEqual("59:53:59,999", _time.ToString());
+            Assert.AreEqual("23:53:59,999", _time.ToString());
 
             _time.AddMin(-60);
-            Assert.AreEqual("58:53:59,999", _time.ToString());
+            Assert.AreEqual("22:53:59,999", _time.ToString());
 
             _time.AddMin(-3600);
             Assert.AreEqual("00:00:00,000", _time.ToString());
@@ -145,9 +145,9 @@ namespace ResynkTest
             FillTime();
 
             _time.AddHeu(-6);
-            Assert.AreEqual("53:59:59,999", _time.ToString());
+            Assert.AreEqual("17:59:59,999", _time.ToString());
 
-            _time.AddHeu(-53);
+            _time.AddHeu(-17);
             Assert.AreEqual("00:59:59,999", _time.ToString());
 
             _time.AddHeu(-60);

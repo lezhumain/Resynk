@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,213 +13,132 @@ namespace Resynk
     {
         protected bool Equals(Time other)
         {
-            return Equals(this._reg, other._reg) && this._h == other._h && this._m == other._m && this._s == other._s && this._z == other._z && this.H == other.H;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Time) obj);
+            return Equals(this._reg, other._reg) && this._date.Equals(other._date);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = (this._reg != null ? this._reg.GetHashCode() : 0);
-                hashCode = (hashCode*397) ^ this._h;
-                hashCode = (hashCode*397) ^ this._m;
-                hashCode = (hashCode*397) ^ this._s;
-                hashCode = (hashCode*397) ^ this._z;
-                hashCode = (hashCode*397) ^ this.H;
-                return hashCode;
+                return ((this._reg != null ? this._reg.GetHashCode() : 0)*397) ^ this._date.GetHashCode();
             }
         }
 
-        private Regex _reg;
+        private readonly Regex _reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
+        private DateTime _date;
 
-        private int _h;
-        public int H { get; set; }
+        public static Time MinValue
+        {
+            get { return new Time(0, 0, 0, 0); }
+        }
 
-        private int _m;
+        public static Time MaxValue
+        {
+            get { return new Time(23, 59, 59, 999); }
+        }
+
+        private const int MaxHour = 23;
+
+        public int H
+        {
+            get { return _date.Hour; }
+            private set { _date = _date.AddHours(value - H); }
+        }
+
         public int M
         {
-            get
-            {
-                return _m;
-            }
-            set
-            {
-                _m = value;
-                if (value >= 60)
-                {
-                    _m = value % 60;
-                    this.H += value / 60;
-                }
-                else if (value < 0)
-                {
-                    _m = 60 + value % 60;
-                    this.H += value / 60 - 1;
-                }
-            }
+            get { return _date.Minute; }
+            private set { _date = _date.AddMinutes(value - M); }
         }
 
-        private int _s;
         public int S
         {
-            get
-            {
-                return _s;
-            }
-            set
-            {
-                _s = value;
-                if (value >= 60)
-                {
-                    _s = value % 60;
-                    this.M += value / 60;
-                }
-                else if (value < 0)
-                {
-                    _s = 60 + value % 60;
-                    this.M += value / 60 - 1;
-                }
-            }
+            get { return _date.Second; }
+            private set { _date = _date.AddSeconds(value - S); }
         }
 
-        private int _z;
         public int Z
         {
-            get
+            get { return _date.Millisecond; }
+            private set { _date = _date.AddMilliseconds(value - Z); }
+        }
+
+        private void SetDateTime(int hh, int mm, int ss, int zz)
+        {
+            try
             {
-                return _z;
+                _date = new DateTime(1, 1, 1, hh, mm, ss, zz);
             }
-            set
+            catch (ArgumentOutOfRangeException e)
             {
-                _z = value;
-                if (value >= 1000)
-                {
-                    _z = value % 1000;
-                    this.S += value / 1000;
-                }
-                else if (value < 0)
-                {
-                    _z = 1000 + value % 1000;
-                    this.S = this.S + value / 1000 - 1;
-                }
+                Debug.WriteLine("erreur : " + e.Message);
             }
         }
 
         public Time()
         {
-            this._reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
         }
 
         public Time(int hh, int mm, int ss, int zz)
         {
-            this._reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
-
-            this.H = hh;
-            this.M = mm;
-            this.S = ss;
-            this.Z = zz;
+            SetDateTime(hh, mm, ss, zz);
         }
 
         public bool Parse(string t)
         {
-            Match m = this._reg.Match(t);
+            var m = this._reg.Match(t);
             //si ligne de temps
-            if (m.Success)
-            {
-                string tps1 = m.Groups[1].ToString();
-                string tps2 = m.Groups[2].ToString();
-                string tps3 = m.Groups[3].ToString();
-                string tps4 = m.Groups[4].ToString();
-
-                try
-                {
-                    this.H = int.Parse(tps1);
-                    this.M = int.Parse(tps2);
-                    this.S = int.Parse(tps3);
-                    this.Z = int.Parse(tps4);
-                }
-                catch
-                {
-                    return false;
-                }
-                return true;
-            }
-            else
+            if (!m.Success)
                 return false;
+
+            var tps1 = m.Groups[1].ToString();
+            var tps2 = m.Groups[2].ToString();
+            var tps3 = m.Groups[3].ToString();
+            var tps4 = m.Groups[4].ToString();
+
+            try
+            {
+                this.SetDateTime(int.Parse(tps1),
+                    int.Parse(tps2),
+                    int.Parse(tps3),
+                    int.Parse(tps4));
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         public void AddMil(int mil)
         {
-            if (mil == 0)
-                return;
-
-            int r = mil % 1000;
-            int v = mil / 1000;
-
-            this.Z = (this.Z + r);
-            if (this.Z < 0)
-                this.Z = 0;
-            
-            AddSec(v);
+            var newMil = mil + _date.Millisecond;
+            TotalMilliseconds = newMil < 0
+                ? 0
+                : newMil;
         }
 
         public void AddSec(int sec)
         {
-            if (sec == 0)
-                return;
-
-            int r = sec % 60;
-            int v = sec / 60;
-
-            this.S = this.S + r;
-            //this.s = (this.s + r) % 60;
-            if (this.S < 0)
-                this.S = 0;
-
-            AddMin(v);
+            _date = _date.AddSeconds(sec);
         }
 
         public void AddMin(int min)
         {
-            if (min == 0)
-                return;
-
-            int r = min % 60;
-            int v = min / 60;
-
-            this.M = (this.M + r);
-            if (this.M < 0)
-                this.M = 0;
-            
-            AddHeu(v);
+            _date = _date.AddMinutes(min);
         }
 
         public void AddHeu(int heu)
         {
-            /*
-            if (heu == 0)
-                return;
-            
-            int r = heu % 60;
-            int v = heu / 60;
-
-            this.h = (this.h + r) % 24;
-            */
-            this.H += heu;
-            if (this.H < 0)
-                this.H = 0;
+            var newHeur = heu + _date.Hour;
+            H = newHeur > MaxHour
+                ? MaxHour
+                : newHeur;
         }
 
-        public string ToString()
+        public override string ToString()
         {
-            string s = "";
+            var s = "";
 
             if (this.H < 10)
                 s += "0";
@@ -247,54 +168,60 @@ namespace Resynk
         // overload operator ==
         public static bool operator ==(Time a, Time b)
         {
-            if (a.H == b.H && a.M == b.M && a.S == b.S && a.Z == b.Z)
+            if (a == null && b == null)
                 return true;
-            else
-                return false;
+
+            return a != null && b != null && a.ToString() == b.ToString();
         }
 
         // overload operator !=
         public static bool operator !=(Time a, Time b)
         {
-            return !(a==b);
+            return !(a == b);
         }
 
         // overload operator >
         public static bool operator >(Time a, Time b)
         {
-            if (a.H > b.H || a.M > b.M || a.S > b.S || a.Z > b.Z)
-                return true;
-            else
-                return false;
+            return a._date > b._date;
         }
 
         // overload operator <
         public static bool operator <(Time a, Time b)
         {
-            if (a.H < b.H || a.M < b.M || a.S < b.S || a.Z < b.Z)
-                return true;
-            else
-                return false;
+            return !(a > b || a == b);
         }
 
         // overload operator >=
         public static bool operator >=(Time a, Time b)
         {
-            if (a > b || a == b)
-                return true;
-            else
-                return false;
+            return a > b || a == b;
         }
 
         // overload operator <=
         public static bool operator <=(Time a, Time b)
         {
-            if (a < b || a == b)
-                return true;
-            else
-                return false;
+            return a < b && a == b;
         }
 
-        // TODO: GetHashCode(), GetEquals()
+        public override bool Equals(object obj)
+        {
+            return !ReferenceEquals(null, obj)
+                   && ReferenceEquals(this, obj)
+                   && !(obj.GetType() != this.GetType())
+                   && Equals((Time) obj);
+        }
+
+        private TimeSpan TStamp
+        {
+            get { return (_date - new DateTime(_date.Year, _date.Month, _date.Day)); }
+            set { _date = new DateTime(1, 1, 1, value.Hours, value.Minutes, value.Seconds, value.Milliseconds); }
+        }
+
+        private double TotalMilliseconds
+        {
+            get { return TStamp.TotalMilliseconds; }
+            set { TStamp = new TimeSpan((long)value); }
+        }
     }
 }
