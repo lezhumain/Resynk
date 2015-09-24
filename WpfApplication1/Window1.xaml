@@ -13,52 +13,52 @@
             </StackPanel.Background>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" VerticalAlignment="Top">
                 <Label Content="Fichier :" HorizontalAlignment="Left" Margin="20,15,0,0" VerticalAlignment="Top"/>
-                <TextBox x:Name="tbFic" HorizontalAlignment="Left" Height="23" Margin="10,10,0,5" IsEnabled="False" TextWrapping="Wrap" 
+                <TextBox x:Name="TbFic" HorizontalAlignment="Left" Height="23" Margin="10,10,0,5" IsEnabled="False" TextWrapping="Wrap" 
                      Text="TextBox" VerticalAlignment="Top" Width="240"/>
             </StackPanel>
             <StackPanel Margin="0,10,0,5" Orientation="Vertical">
                 <Label Margin="15,0,0,0">A partir de</Label>
-                <StackPanel Name="exTemps" Orientation="Horizontal" Height="40" Margin="15,11,0,6">
-                    <TextBox Name="exh" Width="40" Height="30" Margin="0,0,0,5" Text="0"/>
+                <StackPanel Name="ExTemps" Orientation="Horizontal" Height="40" Margin="15,11,0,6">
+                    <TextBox Name="Exh" Width="40" Height="30" Margin="0,0,0,5" Text="0"/>
                     <Label Content="h"></Label>
-                    <TextBox Name="exm" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="Exm" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="m"></Label>
-                    <TextBox Name="exs" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="Exs" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="s"></Label>
-                    <TextBox Name="exz" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="Exz" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="µ"></Label>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
                 <Label Margin="15,0,0,0">Ajouter</Label>
-                <StackPanel Name="spTemps" Orientation="Horizontal" Height="40" Margin="15,11,0,6">
+                <StackPanel Name="SpTemps" Orientation="Horizontal" Height="40" Margin="15,11,0,6">
                     <StackPanel></StackPanel>
-                    <TextBox Name="h" Width="40" Height="30" Margin="0,0,0,5" Text="0"/>
+                    <TextBox Name="H" Width="40" Height="30" Margin="0,0,0,5" Text="0"/>
                     <Label Content="h"></Label>
-                    <TextBox Name="m" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="M" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="m"></Label>
-                    <TextBox Name="s" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="S" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="s"></Label>
-                    <TextBox Name="z" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
+                    <TextBox Name="Z" Width="40" Height="30" Margin="15,0,0,5" Text="0" />
                     <Label Content="µ"></Label>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Height="40" Margin="15,0,0,0">
                 <WrapPanel>
                     <Label Content="En moins"></Label>
-                    <RadioButton Name="rbMoins" GroupName="gn" Margin="5,5,0,0" Checked="RadioButton_Checked_1"></RadioButton>
+                    <RadioButton Name="RbMoins" GroupName="gn" Margin="5,5,0,0" Checked="RadioButton_Checked_1"></RadioButton>
                 </WrapPanel>
                 <WrapPanel Margin="40,0,0,0">
-                    <RadioButton Name="rbPlus" GroupName="gn" Margin="0,5,5,0" Checked="RadioButton_Checked_2"></RadioButton>
+                    <RadioButton Name="RbPlus" GroupName="gn" Margin="0,5,5,0" Checked="RadioButton_Checked_2"></RadioButton>
                     <Label Content="En plus"></Label>
                 </WrapPanel>
             </StackPanel>
             <WrapPanel Margin="0,0,0,20">
                 <!-- binding ??? -->
-                <ProgressBar Name="pb" Maximum="100" Minimum="0" Margin="15,0,15,0" Height="24" Width="300"></ProgressBar>
+                <ProgressBar Name="Pb" Maximum="100" Minimum="0" Margin="15,0,15,0" Height="24" Width="300"></ProgressBar>
             </WrapPanel>
             <StackPanel Height="25" Orientation="Horizontal" VerticalAlignment="Bottom">
-                <Button Height="24" x:Name="bResynk" Content="SrtResynk" Margin="80,0,5,0" IsEnabled="False" HorizontalAlignment="Left" 
+                <Button Height="24" x:Name="BResynk" Content="SrtResynk" Margin="80,0,5,0" IsEnabled="False" HorizontalAlignment="Left" 
             		VerticalAlignment="Top" Width="75" Click="bResynk_Click" />
                 <Button Height="24" Content="Retour" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
                 <Button Height="24" Content="Quitter" HorizontalAlignment="Left" Margin="5,0,5,0" VerticalAlignment="Top" Width="75" Click="Exit"/>

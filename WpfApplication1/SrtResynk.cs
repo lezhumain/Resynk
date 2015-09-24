@@ -121,7 +121,7 @@ namespace Resynk
             total = this.GetNb(lines, chi);
 
             if(!_isTestMode && _window != null)
-                _window.pb.Visibility = System.Windows.Visibility.Visible;
+                _window.Pb.Visibility = System.Windows.Visibility.Visible;
 
             foreach (var line in lines)
             {
@@ -139,7 +139,7 @@ namespace Resynk
                     if (_window != null)
                     {
                         _window.Percent = (float)cpt * 100.0 / (float)total;
-                        _window.pb.Value = _window.Percent;    
+                        _window.Pb.Value = _window.Percent;    
                     }
                 }
 

@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Resynk
 {
@@ -22,7 +13,7 @@ namespace Resynk
     /// </summary>
     public partial class Window1 : Window
     {
-        private string filename { get; set; }
+        private string Filename { get; set; }
         //public int cpt { get; set; }
 
 
@@ -39,13 +30,13 @@ namespace Resynk
         }
         #endregion
 
-        private double percent;
+        private double _percent;
         public double Percent
         {
-            get { return this.percent; }
+            get { return this._percent; }
             set
             {
-                this.percent = value;
+                this._percent = value;
                 NotifyPropertyChange("Percent");
             }
         }
@@ -53,16 +44,16 @@ namespace Resynk
         /// <summary>
         /// Permet de tester l'encodage utilisé pour le fichier texte dont le chemin est fourni
         /// </summary>
-        /// <param name="CheminFichier">Chemin du fichier</param>
+        /// <param name="cheminFichier">Chemin du fichier</param>
         /// <returns>Encodage du fichier Texte</returns>
-        private Encoding ObtientENcoding(string CheminFichier)
+        private static Encoding ObtientENcoding(string cheminFichier)
         {
             /*
              * Source:
              * http://codes-sources.commentcamarche.net/source/35661-c-fonction-permettant-d-obtenir-l-encodage-d-un-fichier-texte
              */
             Encoding enc = null;
-            FileStream file = new FileStream(CheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
 	        if (file.CanSeek)
 	        {
 		        byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
@@ -104,13 +95,13 @@ namespace Resynk
 
         public Window1()
         {
-            init();
+            this.Init();
 
-            tbFic.Text = "lolilol";
-            filename = "";
+            this.TbFic.Text = "lolilol";
+            this.Filename = "";
         }
 
-        private void init()
+        private void Init()
         {
             InitializeComponent();
             DataContext = this;
@@ -120,10 +111,10 @@ namespace Resynk
 
         public Window1(string name, string filename)
         {
-            init();
+            this.Init();
 
-            tbFic.Text = name;
-            this.filename = filename;
+            this.TbFic.Text = name;
+            this.Filename = filename;
         }
 
         private void Exit(object sender, RoutedEventArgs e)
@@ -134,8 +125,8 @@ namespace Resynk
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
             // si tout n'est pas vide
-            if (coutn(spTemps) != 4)
-                bResynk.IsEnabled = true;
+            if (this.Coutn(this.SpTemps) != 4)
+                this.BResynk.IsEnabled = true;
         }
 
         /// <summary>
@@ -143,7 +134,7 @@ namespace Resynk
         /// </summary>
         /// <param name="sp">StackPanel contenant les input</param>
         /// <returns>Le nombre d'input vides</returns>
-        private int coutn(StackPanel sp)
+        private int Coutn(StackPanel sp)
         {
             int cpt = 0;
             foreach (var elem in sp.Children)
@@ -158,8 +149,8 @@ namespace Resynk
         private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
         {
             // si tout n'est pas vide
-            if ( coutn(spTemps) != 4 )
-                bResynk.IsEnabled = true;
+            if ( this.Coutn(this.SpTemps) != 4 )
+                this.BResynk.IsEnabled = true;
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -174,23 +165,23 @@ namespace Resynk
         {
             string path = "";
             int totalMil = 0;
-            StackPanel sp = spTemps;
+            StackPanel sp = this.SpTemps;
             int mili = 0;
             int sec = 0;
             int min = 0;
             int heu = 0;
 
-            if(filename == "")
+            if(this.Filename == "")
                 return;
 
-            path = tbFic.Text.Substring(0, tbFic.Text.Count() - 1 - filename.Count()); 
+            path = this.TbFic.Text.Substring(0, this.TbFic.Text.Count() - 1 - this.Filename.Count()); 
 
             try
             {
-                mili = int.Parse(z.Text);
-                sec = int.Parse(s.Text);
-                min = int.Parse(m.Text);
-                heu = int.Parse(h.Text);
+                mili = int.Parse(this.Z.Text);
+                sec = int.Parse(this.S.Text);
+                min = int.Parse(this.M.Text);
+                heu = int.Parse(this.H.Text);
             }
             catch (FormatException fe)
             {
@@ -201,12 +192,12 @@ namespace Resynk
             totalMil += mili + (sec + 60 * min + 3600 * heu) * 1000;
             
             // Gere le signe
-            if (rbMoins.IsChecked == true)
+            if (this.RbMoins.IsChecked == true)
             {
                 if (totalMil > 0)
                     totalMil *= -1;
             }
-            else if (rbPlus.IsChecked == true)
+            else if (this.RbPlus.IsChecked == true)
             {
                 if (totalMil < 0)
                     totalMil *= -1;
@@ -217,10 +208,10 @@ namespace Resynk
             //string apartir = "" + exh.ToString()
             try
             {
-                mili = int.Parse(exz.Text);
-                sec = int.Parse(exs.Text);
-                min = int.Parse(exm.Text);
-                heu = int.Parse(exh.Text);
+                mili = int.Parse(this.Exz.Text);
+                sec = int.Parse(this.Exs.Text);
+                min = int.Parse(this.Exm.Text);
+                heu = int.Parse(this.Exh.Text);
             }
             catch (FormatException fe)
             {
@@ -229,7 +220,7 @@ namespace Resynk
             }
             Time t = new Time(heu, min, sec, mili);
             //------------------------
-            this.Resynk(path, filename, totalMil, t);
+            this.Resynk(path, this.Filename, totalMil, t);
             
             Alert("Syncro terminée.");
 
@@ -244,7 +235,7 @@ namespace Resynk
             resynk.Resynk(path, ifile, milToAdd, tapartirde,
                         ObtientENcoding(path + "\\" + ifile));
 
-            pb.Visibility = Visibility.Visible;
+            this.Pb.Visibility = Visibility.Visible;
         }
 
         private void Alert(string msg)

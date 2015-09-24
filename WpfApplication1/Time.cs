@@ -11,7 +11,7 @@ namespace Resynk
     {
         protected bool Equals(Time other)
         {
-            return Equals(this.reg, other.reg) && this._h == other._h && this._m == other._m && this._s == other._s && this._z == other._z && this.h == other.h;
+            return Equals(this._reg, other._reg) && this._h == other._h && this._m == other._m && this._s == other._s && this._z == other._z && this.H == other.H;
         }
 
         public override bool Equals(object obj)
@@ -26,23 +26,23 @@ namespace Resynk
         {
             unchecked
             {
-                var hashCode = (this.reg != null ? this.reg.GetHashCode() : 0);
+                var hashCode = (this._reg != null ? this._reg.GetHashCode() : 0);
                 hashCode = (hashCode*397) ^ this._h;
                 hashCode = (hashCode*397) ^ this._m;
                 hashCode = (hashCode*397) ^ this._s;
                 hashCode = (hashCode*397) ^ this._z;
-                hashCode = (hashCode*397) ^ this.h;
+                hashCode = (hashCode*397) ^ this.H;
                 return hashCode;
             }
         }
 
-        private Regex reg;
+        private Regex _reg;
 
         private int _h;
-        public int h { get; set; }
+        public int H { get; set; }
 
         private int _m;
-        public int m
+        public int M
         {
             get
             {
@@ -54,18 +54,18 @@ namespace Resynk
                 if (value >= 60)
                 {
                     _m = value % 60;
-                    h += value / 60;
+                    this.H += value / 60;
                 }
                 else if (value < 0)
                 {
                     _m = 60 + value % 60;
-                    h += value / 60 - 1;
+                    this.H += value / 60 - 1;
                 }
             }
         }
 
         private int _s;
-        public int s
+        public int S
         {
             get
             {
@@ -77,18 +77,18 @@ namespace Resynk
                 if (value >= 60)
                 {
                     _s = value % 60;
-                    m += value / 60;
+                    this.M += value / 60;
                 }
                 else if (value < 0)
                 {
                     _s = 60 + value % 60;
-                    m += value / 60 - 1;
+                    this.M += value / 60 - 1;
                 }
             }
         }
 
         private int _z;
-        public int z
+        public int Z
         {
             get
             {
@@ -100,34 +100,34 @@ namespace Resynk
                 if (value >= 1000)
                 {
                     _z = value % 1000;
-                    s += value / 1000;
+                    this.S += value / 1000;
                 }
                 else if (value < 0)
                 {
                     _z = 1000 + value % 1000;
-                    s = s + value / 1000 - 1;
+                    this.S = this.S + value / 1000 - 1;
                 }
             }
         }
 
         public Time()
         {
-            this.reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
+            this._reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
         }
 
         public Time(int hh, int mm, int ss, int zz)
         {
-            this.reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
+            this._reg = new Regex(@"([0-9]{2}):([0-9]{2}):([0-9]{2}),([0-9]{3})", RegexOptions.IgnoreCase);
 
-            h = hh;
-            m = mm;
-            s = ss;
-            z = zz;
+            this.H = hh;
+            this.M = mm;
+            this.S = ss;
+            this.Z = zz;
         }
 
         public bool Parse(string t)
         {
-            Match m = reg.Match(t);
+            Match m = this._reg.Match(t);
             //si ligne de temps
             if (m.Success)
             {
@@ -138,10 +138,10 @@ namespace Resynk
 
                 try
                 {
-                    h = int.Parse(tps1);
-                    this.m = int.Parse(tps2);
-                    s = int.Parse(tps3);
-                    z = int.Parse(tps4);
+                    this.H = int.Parse(tps1);
+                    this.M = int.Parse(tps2);
+                    this.S = int.Parse(tps3);
+                    this.Z = int.Parse(tps4);
                 }
                 catch
                 {
@@ -161,9 +161,9 @@ namespace Resynk
             int r = mil % 1000;
             int v = mil / 1000;
 
-            this.z = (this.z + r);
-            if (this.z < 0)
-                this.z = 0;
+            this.Z = (this.Z + r);
+            if (this.Z < 0)
+                this.Z = 0;
             
             AddSec(v);
         }
@@ -176,10 +176,10 @@ namespace Resynk
             int r = sec % 60;
             int v = sec / 60;
 
-            this.s = this.s + r;
+            this.S = this.S + r;
             //this.s = (this.s + r) % 60;
-            if (this.s < 0)
-                this.s = 0;
+            if (this.S < 0)
+                this.S = 0;
 
             AddMin(v);
         }
@@ -192,9 +192,9 @@ namespace Resynk
             int r = min % 60;
             int v = min / 60;
 
-            this.m = (this.m + r);
-            if (this.m < 0)
-                this.m = 0;
+            this.M = (this.M + r);
+            if (this.M < 0)
+                this.M = 0;
             
             AddHeu(v);
         }
@@ -210,36 +210,36 @@ namespace Resynk
 
             this.h = (this.h + r) % 24;
             */
-            this.h += heu;
-            if (this.h < 0)
-                this.h = 0;
+            this.H += heu;
+            if (this.H < 0)
+                this.H = 0;
         }
 
         public string ToString()
         {
             string s = "";
 
-            if (h < 10)
+            if (this.H < 10)
                 s += "0";
 
-            s += "" + h + ":";
+            s += "" + this.H + ":";
 
-            if (m < 10)
+            if (this.M < 10)
                 s += "0";
 
-            s += "" + m + ":";
+            s += "" + this.M + ":";
 
-            if (this.s < 10)
+            if (this.S < 10)
                 s += "0";
 
-            s += "" + this.s + ",";
+            s += "" + this.S + ",";
 
-            if (z < 100)
+            if (this.Z < 100)
                 s += "0";
-            if (z < 10)
+            if (this.Z < 10)
                 s += "0";
 
-            s += "" + z;
+            s += "" + this.Z;
 
             return s;
         }
@@ -247,7 +247,7 @@ namespace Resynk
         // overload operator ==
         public static bool operator ==(Time a, Time b)
         {
-            if (a.h == b.h && a.m == b.m && a.s == b.s && a.z == b.z)
+            if (a.H == b.H && a.M == b.M && a.S == b.S && a.Z == b.Z)
                 return true;
             else
                 return false;
@@ -262,7 +262,7 @@ namespace Resynk
         // overload operator >
         public static bool operator >(Time a, Time b)
         {
-            if (a.h > b.h || a.m > b.m || a.s > b.s || a.z > b.z)
+            if (a.H > b.H || a.M > b.M || a.S > b.S || a.Z > b.Z)
                 return true;
             else
                 return false;
@@ -271,7 +271,7 @@ namespace Resynk
         // overload operator <
         public static bool operator <(Time a, Time b)
         {
-            if (a.h < b.h || a.m < b.m || a.s < b.s || a.z < b.z)
+            if (a.H < b.H || a.M < b.M || a.S < b.S || a.Z < b.Z)
                 return true;
             else
                 return false;
