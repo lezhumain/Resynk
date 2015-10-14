@@ -17,11 +17,10 @@ namespace Resynk
         private string Filename { get; set; }
         //public int cpt { get; set; }
 
-
         #region INotifyPropertyChanged
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         protected void NotifyPropertyChange(string propertyName)
         {
             if (PropertyChanged != null)
@@ -29,9 +28,11 @@ namespace Resynk
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
         #endregion
 
         private double _percent;
+
         public double Percent
         {
             get { return this._percent; }
@@ -55,42 +56,42 @@ namespace Resynk
              */
             Encoding enc = null;
             FileStream file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
-	        if (file.CanSeek)
-	        {
-		        byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
-		        file.Read(bom, 0, 4);
-		        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) // utf-8
-		        {
-			        enc = Encoding.UTF8;
-		        }
-		        else if ((bom[0] == 0xff && bom[1] == 0xfe) || // ucs-2le, ucs-4le, and ucs-16le
-			        (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)) // ucs-4
-		        {
-			        enc = Encoding.Unicode;
-		        }
-		        else if (bom[0] == 0xfe && bom[1] == 0xff) // utf-16 and ucs-2
-		        {
-			        enc = Encoding.BigEndianUnicode;
-		        }
-		        else // ANSI, Default
-		        {
-			        enc = Encoding.Default;
-		        }
-		        // Now reposition the file cursor back to the start of the file
-		        file.Seek(0, SeekOrigin.Begin);
-	        }
-	        else
-	        {
-		        // The file cannot be randomly accessed, so you need to decide what to set the default to
-		        // based on the data provided. If you're expecting data from a lot of older applications,
-		        // default your encoding to Encoding.ASCII. If you're expecting data from a lot of newer
-		        // applications, default your encoding to Encoding.Unicode. Also, since binary files are
-		        // single byte-based, so you will want to use Encoding.ASCII, even though you'll probably
-		        // never need to use the encoding then since the Encoding classes are really meant to get
-		        // strings from the byte array that is the file.
+            if (file.CanSeek)
+            {
+                byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
+                file.Read(bom, 0, 4);
+                if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) // utf-8
+                {
+                    enc = Encoding.UTF8;
+                }
+                else if ((bom[0] == 0xff && bom[1] == 0xfe) || // ucs-2le, ucs-4le, and ucs-16le
+                         (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)) // ucs-4
+                {
+                    enc = Encoding.Unicode;
+                }
+                else if (bom[0] == 0xfe && bom[1] == 0xff) // utf-16 and ucs-2
+                {
+                    enc = Encoding.BigEndianUnicode;
+                }
+                else // ANSI, Default
+                {
+                    enc = Encoding.Default;
+                }
+                // Now reposition the file cursor back to the start of the file
+                file.Seek(0, SeekOrigin.Begin);
+            }
+            else
+            {
+                // The file cannot be randomly accessed, so you need to decide what to set the default to
+                // based on the data provided. If you're expecting data from a lot of older applications,
+                // default your encoding to Encoding.ASCII. If you're expecting data from a lot of newer
+                // applications, default your encoding to Encoding.Unicode. Also, since binary files are
+                // single byte-based, so you will want to use Encoding.ASCII, even though you'll probably
+                // never need to use the encoding then since the Encoding classes are really meant to get
+                // strings from the byte array that is the file.
 
-		        enc = Encoding.Default;
-	        }
+                enc = Encoding.Default;
+            }
             return enc;
         }
 
@@ -137,13 +138,16 @@ namespace Resynk
         /// <returns>Le nombre d'input vides</returns>
         private int Coutn(Panel sp)
         {
-            return sp.Children.Cast<object>().Where(elem => elem.GetType().Name == "TextBox").Count(elem => (elem as TextBox) != null && ((TextBox)elem).Text == "0");
+            return
+                sp.Children.Cast<object>()
+                    .Where(elem => elem.GetType().Name == "TextBox")
+                    .Count(elem => (elem as TextBox) != null && ((TextBox) elem).Text == "0");
         }
 
         private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
         {
             // si tout n'est pas vide
-            if ( this.Coutn(this.SpTemps) != 4 )
+            if (this.Coutn(this.SpTemps) != 4)
                 this.BResynk.IsEnabled = true;
         }
 
@@ -165,10 +169,10 @@ namespace Resynk
             int min = 0;
             int heu = 0;
 
-            if(this.Filename == "")
+            if (this.Filename == "")
                 return;
 
-            path = this.TbFic.Text.Substring(0, this.TbFic.Text.Count() - 1 - this.Filename.Count()); 
+            path = this.TbFic.Text.Substring(0, this.TbFic.Text.Count() - 1 - this.Filename.Count());
 
             try
             {
@@ -183,9 +187,9 @@ namespace Resynk
                 Alert("Seulement des nombres");
                 return;
             }
-            
-            totalMil += mili + (sec + 60 * min + 3600 * heu) * 1000;
-            
+
+            totalMil += mili + (sec + 60*min + 3600*heu)*1000;
+
             // Gere le signe
             if (this.RbMoins.IsChecked == true)
             {
@@ -217,7 +221,7 @@ namespace Resynk
             Time t = new Time(heu, min, sec, mili);
             //------------------------
             this.Resynk(path, this.Filename, totalMil, t);
-            
+
             Alert("Syncro terminée.");
 
             this.Button_Click_1(new object(), new RoutedEventArgs());
@@ -229,7 +233,7 @@ namespace Resynk
             SrtResynk resynk = new SrtResynk(this);
 
             resynk.Resynk(path, ifile, milToAdd, tapartirde,
-                        ObtientENcoding(path + "\\" + ifile));
+                ObtientENcoding(path + "\\" + ifile));
 
             this.Pb.Visibility = Visibility.Visible;
         }

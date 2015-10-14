@@ -26,7 +26,7 @@ namespace Resynk
         {
             _isTestMode = true;
             _milToAdd = milToAdd;
-            _tapartirde = new Time(0,0,0,0);
+            _tapartirde = new Time(0, 0, 0, 0);
             _enc = new UTF8Encoding();
             this.TestContent = new List<string>();
         }
@@ -59,14 +59,14 @@ namespace Resynk
 
             //string ofile = "synk_" + ifile;
             this._ofile = this._ifile.Substring(0, ifile.Length - 5) + "_synk.srt";
-            
+
 
             //Encoding enc = ObtientENcoding(path + "\\" + ifile);
 
             string[] lines = File.ReadAllLines(@path + "\\" + ifile, enc);
 
             this.ResynkLines(lines);
-            
+
 
             // MoveFocus path + "\\" + ifile to old
             //String newifile = ifile.Substring(0, ifile.Length - 5) + "_old.srt";
@@ -87,7 +87,7 @@ namespace Resynk
             }
 
             int cpt = 1;
-            
+
             /*
             cTime tapartirde = new cTime();
             
@@ -112,12 +112,12 @@ namespace Resynk
             if (!_isTestMode)
             {
                 fs = File.Create(this._path + "\\" + this._ofile);
-                file = new StreamWriter(fs, this._enc);                
+                file = new StreamWriter(fs, this._enc);
             }
 
             int total = this.GetNb(lines, chi);
 
-            if(!_isTestMode && _window != null)
+            if (!_isTestMode && _window != null)
                 _window.Pb.Visibility = System.Windows.Visibility.Visible;
 
             foreach (string line in lines)
@@ -135,8 +135,8 @@ namespace Resynk
                     // binding???
                     if (_window != null)
                     {
-                        _window.Percent = cpt * 100.0 / total;
-                        _window.Pb.Value = _window.Percent;    
+                        _window.Percent = cpt*100.0/total;
+                        _window.Pb.Value = _window.Percent;
                     }
                 }
 
@@ -172,7 +172,7 @@ namespace Resynk
             if (!_isTestMode && fs != null)
             {
                 file.Close();
-                fs.Close();                
+                fs.Close();
             }
 
             return true;

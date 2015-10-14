@@ -38,10 +38,10 @@ namespace ResynkTest
 
             _time.AddMil(600);
             Assert.AreEqual("00:00:00,600", _time.ToString());
-            
+
             _time.AddMil(1000);
             Assert.AreEqual("00:00:01,600", _time.ToString());
-            
+
             _time.AddMil(60000);
             Assert.AreEqual("00:01:01,600", _time.ToString());
 

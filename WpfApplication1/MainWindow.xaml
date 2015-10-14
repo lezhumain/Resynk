@@ -5,11 +5,13 @@
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="#FF3D4650"/>
-                <GradientStop Color="#FF56626F" Offset="0.984"/>
+                <GradientStop Color="#FF3D4650" />
+                <GradientStop Color="#FF56626F" Offset="0.984" />
             </LinearGradientBrush>
         </Grid.Background>
-        <Button Height="24" Content="Ouvrir un fichier" HorizontalAlignment="Left" Margin="35,30,0,0" VerticalAlignment="Top" Width="107" Click="Button_Click_1"/>
-        <Button Height="24" Content="Quitter" HorizontalAlignment="Left" Margin="178,30,0,0" VerticalAlignment="Top" Width="75" Click="Exit"/>
+        <Button Height="24" Content="Ouvrir un fichier" HorizontalAlignment="Left" Margin="35,30,0,0"
+                VerticalAlignment="Top" Width="107" Click="Button_Click_1" />
+        <Button Height="24" Content="Quitter" HorizontalAlignment="Left" Margin="178,30,0,0" VerticalAlignment="Top"
+                Width="75" Click="Exit" />
     </Grid>
 </Window>

@@ -25,7 +25,6 @@ namespace Resynk
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
 
-
             // Set filter for file extension and default file extension
 
             dlg.DefaultExt = ".srt";
@@ -33,18 +32,15 @@ namespace Resynk
             dlg.Filter = "Subtitles (.srt)|*.srt";
 
 
-
             // Display OpenFileDialog by calling ShowDialog method
 
             Nullable<bool> result = dlg.ShowDialog();
-
 
 
             // Get the selected file name and display in a TextBox
 
             if (result == true)
             {
-
                 // Open document
 
                 string filename = dlg.FileName;
@@ -55,7 +51,6 @@ namespace Resynk
                 Application.Current.MainWindow = w;
                 this.Close();
             }
-            
         }
     }
 }
