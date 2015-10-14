@@ -249,9 +249,6 @@ namespace Resynk
             this.h = (this.h + r) % 24;
             */
             this.H += heu;
-            // TODO: remove this
-            if (this.H < 0)
-                this.H = 0;
         }
 
         public override string ToString()
