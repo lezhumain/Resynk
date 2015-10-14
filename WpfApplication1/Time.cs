@@ -21,7 +21,7 @@ namespace Resynk
         {
             unchecked
             {
-                var hashCode = (this._reg != null ? this._reg.GetHashCode() : 0);
+                int hashCode = (this._reg != null ? this._reg.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ this.H;
                 hashCode = (hashCode * 397) ^ this.M;
                 hashCode = (hashCode * 397) ^ this.S;

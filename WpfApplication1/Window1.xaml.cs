@@ -54,10 +54,10 @@ namespace Resynk
              * http://codes-sources.commentcamarche.net/source/35661-c-fonction-permettant-d-obtenir-l-encodage-d-un-fichier-texte
              */
             Encoding enc = null;
-            var file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
+            FileStream file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
 	        if (file.CanSeek)
 	        {
-		        var bom = new byte[4]; // Get the byte-order mark, if there is one
+		        byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
 		        file.Read(bom, 0, 4);
 		        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) // utf-8
 		        {
@@ -149,7 +149,7 @@ namespace Resynk
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var w = new MainWindow();
+            MainWindow w = new MainWindow();
             w.Show();
             Application.Current.MainWindow = w;
             this.Close();
@@ -157,13 +157,13 @@ namespace Resynk
 
         private void bResynk_Click(object sender, RoutedEventArgs e)
         {
-            var path = "";
-            var totalMil = 0;
-            var sp = this.SpTemps;
-            var mili = 0;
+            string path = "";
+            int totalMil = 0;
+            StackPanel sp = this.SpTemps;
+            int mili = 0;
             int sec;
-            var min = 0;
-            var heu = 0;
+            int min = 0;
+            int heu = 0;
 
             if(this.Filename == "")
                 return;
@@ -214,7 +214,7 @@ namespace Resynk
                 Alert("Seulement des nombres");
                 return;
             }
-            var t = new Time(heu, min, sec, mili);
+            Time t = new Time(heu, min, sec, mili);
             //------------------------
             this.Resynk(path, this.Filename, totalMil, t);
             
@@ -226,7 +226,7 @@ namespace Resynk
 
         private void Resynk(string path, string ifile, int milToAdd, Time tapartirde)
         {
-            var resynk = new SrtResynk(this);
+            SrtResynk resynk = new SrtResynk(this);
 
             resynk.Resynk(path, ifile, milToAdd, tapartirde,
                         ObtientENcoding(path + "\\" + ifile));

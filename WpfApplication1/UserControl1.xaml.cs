@@ -21,8 +21,8 @@ namespace Resynk
 
         private void value_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var tb = (TextBox)sender;
-            var text = tb.Text.Insert(tb.CaretIndex, e.Text);
+            TextBox tb = (TextBox)sender;
+            string text = tb.Text.Insert(tb.CaretIndex, e.Text);
 
             e.Handled = !_numMatch.IsMatch(text);
         }
@@ -85,7 +85,7 @@ namespace Resynk
 
         private void value_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var tb = (TextBox)sender;
+            TextBox tb = (TextBox)sender;
             if (!_numMatch.IsMatch(tb.Text)) 
                 tb.Text = "";
             Value = Convert.ToInt32(tb.Text);
