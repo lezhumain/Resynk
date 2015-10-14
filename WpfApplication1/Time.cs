@@ -109,8 +109,8 @@ namespace Resynk
             }
         }
 
-        public static Time MinValue => new Time(0, 0, 0, 0);
-        public static Time MaxValue => new Time(23, 59, 59, 999);
+        public static Time MinValue = new Time(0, 0, 0, 0);
+        public static Time MaxValue = new Time(23, 59, 59, 999);
 
         protected bool Equals(Time other)
         {
