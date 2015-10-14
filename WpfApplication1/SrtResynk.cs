@@ -63,7 +63,7 @@ namespace Resynk
 
             //Encoding enc = ObtientENcoding(path + "\\" + ifile);
 
-            var lines = File.ReadAllLines(@path + "\\" + ifile, enc);
+            string[] lines = File.ReadAllLines(@path + "\\" + ifile, enc);
 
             this.ResynkLines(lines);
             
@@ -86,7 +86,7 @@ namespace Resynk
                 return false;
             }
 
-            var cpt = 1;
+            int cpt = 1;
             
             /*
             cTime tapartirde = new cTime();
@@ -96,33 +96,33 @@ namespace Resynk
             */
 
             // Chiffre seul
-            var patternC = @"^[0-9]+$";
+            string patternC = @"^[0-9]+$";
             // Temps => 00:00:00,000 --> 00:00:00,000
-            var patternT = @"^([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})\s?$";
+            string patternT = @"^([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3}) --> ([0-9]{2}:[0-9]{2}:[0-9]{2},[0-9]{3})\s?$";
 
             // Instantiate the regular expression object.
-            var chi = new Regex(patternC, RegexOptions.IgnoreCase);
-            var tps = new Regex(patternT, RegexOptions.IgnoreCase);
+            Regex chi = new Regex(patternC, RegexOptions.IgnoreCase);
+            Regex tps = new Regex(patternT, RegexOptions.IgnoreCase);
 
             // output file
             //System.IO.StreamWriter file = new System.IO.StreamWriter(path + "\\" + ofile);
 
             FileStream fs = null;
-            var file = StreamWriter.Null;
+            StreamWriter file = StreamWriter.Null;
             if (!_isTestMode)
             {
                 fs = File.Create(this._path + "\\" + this._ofile);
                 file = new StreamWriter(fs, this._enc);                
             }
 
-            var total = this.GetNb(lines, chi);
+            int total = this.GetNb(lines, chi);
 
             if(!_isTestMode && _window != null)
                 _window.Pb.Visibility = System.Windows.Visibility.Visible;
 
-            foreach (var line in lines)
+            foreach (string line in lines)
             {
-                var ligne = line;
+                string ligne = line;
 
                 //si ligne de chiffre
                 if (chi.Match(line).Success)
@@ -140,17 +140,17 @@ namespace Resynk
                     }
                 }
 
-                var m = tps.Match(line);
+                Match m = tps.Match(line);
 
                 if (m.Success) //si ligne de temps
                 {
-                    var tps1 = m.Groups[1].ToString();
-                    var tps2 = m.Groups[2].ToString();
+                    string tps1 = m.Groups[1].ToString();
+                    string tps2 = m.Groups[2].ToString();
 
-                    var ti1 = new Time();
+                    Time ti1 = new Time();
                     ti1.Parse(tps1);
 
-                    var ti2 = new Time();
+                    Time ti2 = new Time();
                     ti2.Parse(tps2);
 
                     if (ti1 >= this._tapartirde)
