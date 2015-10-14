@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Resynk
 {
@@ -89,7 +87,6 @@ namespace Resynk
             }
 
             var cpt = 1;
-            var total = 0;
             
             /*
             cTime tapartirde = new cTime();
@@ -118,7 +115,7 @@ namespace Resynk
                 file = new StreamWriter(fs, this._enc);                
             }
 
-            total = this.GetNb(lines, chi);
+            var total = this.GetNb(lines, chi);
 
             if(!_isTestMode && _window != null)
                 _window.Pb.Visibility = System.Windows.Visibility.Visible;
@@ -138,7 +135,7 @@ namespace Resynk
                     // binding???
                     if (_window != null)
                     {
-                        _window.Percent = (float)cpt * 100.0 / (float)total;
+                        _window.Percent = cpt * 100.0 / total;
                         _window.Pb.Value = _window.Percent;    
                     }
                 }

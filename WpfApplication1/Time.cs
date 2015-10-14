@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace Resynk
 {
@@ -92,8 +87,8 @@ namespace Resynk
             }
         }
 
-        public int _s;
-        private int S
+        private int _s;
+        public int S
         {
             get
             {

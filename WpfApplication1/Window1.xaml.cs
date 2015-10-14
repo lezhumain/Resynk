@@ -161,7 +161,7 @@ namespace Resynk
             var totalMil = 0;
             var sp = this.SpTemps;
             var mili = 0;
-            var sec = 0;
+            int sec;
             var min = 0;
             var heu = 0;
 
