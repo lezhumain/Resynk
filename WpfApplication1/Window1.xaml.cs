@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -53,10 +54,10 @@ namespace Resynk
              * http://codes-sources.commentcamarche.net/source/35661-c-fonction-permettant-d-obtenir-l-encodage-d-un-fichier-texte
              */
             Encoding enc = null;
-            FileStream file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var file = new FileStream(cheminFichier, FileMode.Open, FileAccess.Read, FileShare.Read);
 	        if (file.CanSeek)
 	        {
-		        byte[] bom = new byte[4]; // Get the byte-order mark, if there is one
+		        var bom = new byte[4]; // Get the byte-order mark, if there is one
 		        file.Read(bom, 0, 4);
 		        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) // utf-8
 		        {
@@ -134,16 +135,9 @@ namespace Resynk
         /// </summary>
         /// <param name="sp">StackPanel contenant les input</param>
         /// <returns>Le nombre d'input vides</returns>
-        private int Coutn(StackPanel sp)
+        private int Coutn(Panel sp)
         {
-            int cpt = 0;
-            foreach (var elem in sp.Children)
-            {
-                if (elem.GetType().Name == "TextBox")
-                    if ((elem as TextBox).Text == "0")
-                        ++cpt;
-            }
-            return cpt;
+            return sp.Children.Cast<object>().Where(elem => elem.GetType().Name == "TextBox").Count(elem => (elem as TextBox) != null && ((TextBox)elem).Text == "0");
         }
 
         private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
@@ -155,7 +149,7 @@ namespace Resynk
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            MainWindow w = new MainWindow();
+            var w = new MainWindow();
             w.Show();
             Application.Current.MainWindow = w;
             this.Close();
@@ -163,13 +157,13 @@ namespace Resynk
 
         private void bResynk_Click(object sender, RoutedEventArgs e)
         {
-            string path = "";
-            int totalMil = 0;
-            StackPanel sp = this.SpTemps;
-            int mili = 0;
-            int sec = 0;
-            int min = 0;
-            int heu = 0;
+            var path = "";
+            var totalMil = 0;
+            var sp = this.SpTemps;
+            var mili = 0;
+            var sec = 0;
+            var min = 0;
+            var heu = 0;
 
             if(this.Filename == "")
                 return;
@@ -185,6 +179,7 @@ namespace Resynk
             }
             catch (FormatException fe)
             {
+                Debug.WriteLine(fe.Message);
                 Alert("Seulement des nombres");
                 return;
             }
@@ -215,10 +210,11 @@ namespace Resynk
             }
             catch (FormatException fe)
             {
+                Debug.WriteLine(fe.Message);
                 Alert("Seulement des nombres");
                 return;
             }
-            Time t = new Time(heu, min, sec, mili);
+            var t = new Time(heu, min, sec, mili);
             //------------------------
             this.Resynk(path, this.Filename, totalMil, t);
             

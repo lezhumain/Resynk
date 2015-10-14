@@ -90,9 +90,9 @@ namespace Resynk
 
             var cpt = 1;
             var total = 0;
-            double lol = 0;
+            
             /*
-            Time tapartirde = new Time();
+            cTime tapartirde = new cTime();
             
             if(!tapartirde.Parse(apartirde))
                 return;

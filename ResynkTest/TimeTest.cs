@@ -13,11 +13,13 @@ namespace ResynkTest
         private void ResetTime()
         {
             _time = Time.MinValue;
+            //_time = new cTime(0, 0, 0, 0);
         }
 
         private void FillTime()
         {
             _time = Time.MaxValue;
+            //_time = new cTime(23, 59, 59, 999);
         }
 
         [TestInitialize]
@@ -85,7 +87,7 @@ namespace ResynkTest
             Assert.AreEqual("06:00:00,000", _time.ToString());
 
             _time.AddHeu(60);
-            Assert.AreEqual("23:00:00,000", _time.ToString());
+            Assert.AreEqual("23:59:59,999", _time.ToString());
         }
 
         [TestMethod]
